@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#FFB5A0</color>
+    <color name="on_primary">#5F1500</color>
+    <color name="primary_container">#862200</color>
+    <color name="on_primary_container">#FFDBD1</color>
+    <color name="primary_inverse">#B02F00</color>
+    <color name="secondary">#E7BDB2</color>
+    <color name="on_secondary">#442A22</color>
+    <color name="secondary_container">#5D4037</color>
+    <color name="on_secondary_container">#FFDBD1</color>
+    <color name="surface">#1A110F</color>
+    <color name="on_surface">#F1DFDA</color>
+    <color name="surface_variant">#53433F</color>
+    <color name="on_surface_variant">#D8C2BC</color>
+    <color name="outline">#A08C87</color>
+    <color name="outline_variant">#53433F</color>
+    <color name="surface_lowest">#140C0A</color>
+    <color name="surface_low">#231917</color>
+    <color name="surface_container">#271D1B</color>
+    <color name="surface_high">#322825</color>
+    <color name="surface_highest">#3D3230</color>
+    <color name="muscle_base">#6B5D58</color>
+    <color name="muscle_hot">#FF7A5C</color>
+    <color name="muscle_warm">#9C5244</color>
+    <color name="macro_protein">#FFB5A0</color>
+    <color name="macro_fat">#F2C46B</color>
+    <color name="macro_carbs">#8FD3B0</color>
+    <bool name="light_bars">false</bool>
+</resources>

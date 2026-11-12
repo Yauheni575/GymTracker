@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="?attr/materialCardViewFilledStyle"
+    android:layout_width="84dp"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="6dp"
+    app:cardCornerRadius="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="8dp">
+
+        <com.gym.tracker.MuscleMapView
+            android:id="@+id/map"
+            android:layout_width="match_parent"
+            android:layout_height="56dp" />
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:contentDescription="@null"
+            android:padding="12dp"
+            android:src="@drawable/ic_star"
+            android:visibility="gone"
+            app:tint="?attr/colorPrimary" />
+
+        <TextView
+            android:id="@+id/label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:textAppearance="?attr/textAppearanceLabelMedium" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

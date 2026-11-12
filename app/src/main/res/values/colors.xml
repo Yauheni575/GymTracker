@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#B02F00</color>
+    <color name="on_primary">#FFFFFF</color>
+    <color name="primary_container">#FFDBD1</color>
+    <color name="on_primary_container">#3B0900</color>
+    <color name="primary_inverse">#FFB5A0</color>
+    <color name="secondary">#77574E</color>
+    <color name="on_secondary">#FFFFFF</color>
+    <color name="secondary_container">#FFDBD1</color>
+    <color name="on_secondary_container">#2C150F</color>
+    <color name="surface">#FFF8F6</color>
+    <color name="on_surface">#231917</color>
+    <color name="surface_variant">#F5DED8</color>
+    <color name="on_surface_variant">#53433F</color>
+    <color name="outline">#85736E</color>
+    <color name="outline_variant">#D8C2BC</color>
+    <color name="surface_lowest">#FFFFFF</color>
+    <color name="surface_low">#FFF1ED</color>
+    <color name="surface_container">#FCEAE5</color>
+    <color name="surface_high">#F7E4DF</color>
+    <color name="surface_highest">#F1DFDA</color>
+    <color name="icon_background">#FF5722</color>
+    <color name="muscle_base">#C9BFBB</color>
+    <color name="muscle_hot">#E5391B</color>
+    <color name="muscle_warm">#F5A592</color>
+    <color name="macro_protein">#B02F00</color>
+    <color name="macro_fat">#B7791F</color>
+    <color name="macro_carbs">#2F7D5B</color>
+    <color name="trend_up">@color/macro_carbs</color>
+    <color name="trend_flat">@color/macro_fat</color>
+    <bool name="light_bars">true</bool>
+</resources>

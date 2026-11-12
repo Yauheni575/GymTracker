@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <TextView
+        style="@style/PageTitle"
+        android:layout_width="match_parent"
+        android:text="Сколько раз в неделю готовы тренироваться?" />
+
+    <TextView
+        style="@style/PageSubtitle"
+        android:layout_width="match_parent"
+        android:text="Для начала хватит 3 тренировок — так мышцы успевают восстановиться" />
+
+    <FrameLayout
+        android:layout_width="160dp"
+        android:layout_height="160dp"
+        android:layout_marginTop="16dp"
+        android:background="@drawable/bg_circle"
+        android:backgroundTint="?attr/colorPrimaryContainer">
+
+        <TextView
+            android:id="@+id/per_week_value"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:textColor="?attr/colorOnPrimaryContainer"
+            android:textSize="72sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/per_week_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:textAppearance="?attr/textAppearanceTitleMedium" />
+
+    <com.google.android.material.slider.Slider
+        android:id="@+id/per_week"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:stepSize="1"
+        android:value="3"
+        android:valueFrom="1"
+        android:valueTo="7" />
+</LinearLayout>
