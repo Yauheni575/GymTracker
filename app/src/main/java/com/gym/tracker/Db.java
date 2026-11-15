@@ -31,7 +31,7 @@ public class Db extends SQLiteOpenHelper {
     private String login;
 
     private Db(Context context) {
-        super(context, "tracker.db", null, 4);
+        super(context, "tracker.db", null, 5);
     }
 
     public static synchronized Db get(Context context) {
@@ -68,6 +68,7 @@ public class Db extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE body_weight (user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE, "
                 + "date TEXT NOT NULL, weight REAL NOT NULL, PRIMARY KEY (user_id, date))");
         createFood(db);
+        Sync.createSchema(db);
     }
 
     @Override
@@ -75,6 +76,11 @@ public class Db extends SQLiteOpenHelper {
         if (oldVersion < 2) createFood(db);
         else if (oldVersion < 3) db.execSQL("ALTER TABLE food ADD COLUMN code TEXT");
         if (oldVersion < 4) db.execSQL("UPDATE exercise SET favorite = " + ALL_DAYS + " WHERE favorite = 1");
+        if (oldVersion < 5) Sync.createSchema(db);
+    }
+
+    long userId() {
+        return userId;
     }
 
     private static void createFood(SQLiteDatabase db) {

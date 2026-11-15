@@ -11,11 +11,21 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class ProfileFragment extends Fragment {
 
+    private static final DateTimeFormatter SYNCED = DateTimeFormatter.ofPattern("d.MM.yyyy HH:mm");
+
+    private final ExecutorService net = Executors.newSingleThreadExecutor();
     private Db db;
 
     public ProfileFragment() {
@@ -35,12 +45,105 @@ public class ProfileFragment extends Fragment {
             startActivity(new Intent(requireContext(), AuthActivity.class)
                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK));
         });
+        view.findViewById(R.id.cloud_sync).setOnClickListener(v -> {
+            if (Sync.account(db) == null) cloudDialog();
+            else sync();
+        });
+        view.findViewById(R.id.cloud_off).setOnClickListener(v -> {
+            Sync.unlink(db);
+            showCloud(null);
+        });
     }
 
     @Override
     public void onResume() {
         super.onResume();
         load();
+        showCloud(null);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        net.shutdownNow();
+    }
+
+    private void showCloud(String busy) {
+        View v = requireView();
+        String[] account = Sync.account(db);
+        MaterialButton action = v.findViewById(R.id.cloud_sync);
+        action.setText(account == null ? "Подключить" : "Синхронизировать");
+        action.setEnabled(busy == null);
+        v.findViewById(R.id.cloud_off).setVisibility(account != null && busy == null ? View.VISIBLE : View.GONE);
+        String status;
+        if (busy != null) status = busy;
+        else if (account == null) status = "Не подключено. Данные хранятся только на этом телефоне.";
+        else status = "Аккаунт: " + account[0] + "\n" + (account[3] == null
+                ? "Ещё не синхронизировано"
+                : "Синхронизировано " + LocalDateTime.parse(account[3]).format(SYNCED));
+        Ui.text(v, R.id.cloud_status, status);
+    }
+
+    private void cloudDialog() {
+        View form = getLayoutInflater().inflate(R.layout.dialog_cloud, null);
+        EditText login = form.findViewById(R.id.cloud_login);
+        EditText password = form.findViewById(R.id.cloud_password);
+        login.setText(Auth.user(requireContext()));
+        new MaterialAlertDialogBuilder(requireContext())
+                .setTitle("Облако GymTracker")
+                .setMessage("Войдите или создайте аккаунт, чтобы хранить данные на сервере и переносить их между телефонами.")
+                .setView(form)
+                .setPositiveButton("Войти", (d, w) -> connect(false, login, password))
+                .setNeutralButton("Создать аккаунт", (d, w) -> connect(true, login, password))
+                .setNegativeButton("Отмена", null)
+                .show();
+    }
+
+    private void connect(boolean register, EditText loginInput, EditText passwordInput) {
+        String login = loginInput.getText().toString().trim();
+        String password = passwordInput.getText().toString();
+        if (login.length() < 3 || password.length() < 6) {
+            Toast.makeText(requireContext(), "Логин от 3 символов, пароль от 6", Toast.LENGTH_LONG).show();
+            return;
+        }
+        background("Подключение… сервер может просыпаться до минуты", () -> {
+            Sync.link(db, login, Cloud.token(register, login, password));
+            Sync.run(db);
+        });
+    }
+
+    private void sync() {
+        background("Синхронизация… сервер может просыпаться до минуты", () -> Sync.run(db));
+    }
+
+    private void background(String busy, Job job) {
+        showCloud(busy);
+        net.execute(() -> {
+            String error = null;
+            try {
+                job.run();
+            } catch (Cloud.Unauthorized e) {
+                Sync.unlink(db);
+                error = e.getMessage();
+            } catch (IOException e) {
+                error = e.getMessage() == null ? "Нет связи с сервером" : e.getMessage();
+            } catch (Exception e) {
+                error = "Не удалось синхронизировать: " + e.getMessage();
+            }
+            String message = error == null ? "Синхронизировано" : error;
+            View view = getView();
+            if (view == null) return;
+            view.post(() -> {
+                if (!isAdded()) return;
+                Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+                load();
+                showCloud(null);
+            });
+        });
+    }
+
+    interface Job {
+        void run() throws Exception;
     }
 
     private void load() {
